@@ -14,6 +14,7 @@
             $("#imodel").val("");
             $("#ivin").val("");
             $("#icolor").val("");
+            $('input[name=salvage]').filter(':checked').prop("checked", false);
             $("#icylinders").val("");
             $("#itransmission").val("");
             $("#istate").val("");
@@ -58,6 +59,7 @@
                 "vin": $("#ivin").val(),
                 "color": $("#icolor").val(),
                 "numberCylinders": $("#icylinders").val(),
+                "salvageTitle": $('input[name=salvage]').filter(':checked').val(),
                 "transmissionType": $("#itransmission").val(),
                 "licensedState": $("#istate").val(),
                 "licensedCountry": $("#icountry").val(),
@@ -106,7 +108,11 @@
                 $("#imodel").val(data.model);
                 $("#ivin").val(data.vin);
                 $("#icolor").val(data.color);
-                $("#isalvage").val([data.salvageTitle]);
+                if (data.salvageTitle == "true") {
+                    $('input[id=isalvagey]').prop("checked", true);
+                } else {
+                    $('input[id=isalvagen]').prop("checked", true);
+                }
                 $("#icylinders").val(data.numberCylinders);
                 $("#itransmission").val(data.transmissionType);
                 $("#istate").val(data.licensedState);
@@ -121,7 +127,7 @@
 
             // if there is no id value in the form, then assume this is a new auto and do an add
             if ($("#recordid").val() == "") {
-                console.log("adding new row " + $("#recordid").val())
+console.log("adding new row " + getFormFields());
                 $.post("http://localhost:1337/automobile",
                     getFormFields(),
                     function (data, status) {
@@ -135,7 +141,7 @@
                 });
             } else {
                 // if there is an ID value, then modify the record
-                console.log("updating id " + $("#recordid").val())
+console.log("updating row " + getFormFields());
                 ajaxResult = $.ajax({
                     type: "PUT",
                     url: "http://localhost:1337/automobile/" + $("#recordid").val(),
