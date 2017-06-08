@@ -2,6 +2,7 @@
 
     $(function () {
 
+        // display blank on the screen instead of 'undefined'
         function undef(string) {
             return typeof string === "undefined" ? "" : string;
         }
@@ -31,7 +32,7 @@
         // populate the column values of a row
         function loadRow(val) {
             let newRow = "<tr>" +
-                "<td><a class='modify' id='" + val.id + "'>Modify<a></td>" +
+                "<td><a class='modify' data='" + val.id + "'>Modify<a></td>" +
                 "<td>" + val.year + "</td>" +
                 "<td>" + val.make + "</td>" +
                 "<td>" + val.model + "</td>" +
@@ -43,7 +44,7 @@
                 "<td>" + undef(val.licensedState) + "</td>" +
                 "<td>" + undef(val.licensedCountry) + "</td>" +
                 "<td>" + undef(val.licenseNumber) + "</td>" +
-                "<td><a class='delete' id='" + val.id + "'>Delete<a></td>"
+                "<td><a class='delete' data='" + val.id + "'>Delete<a></td>"
             "</tr>";
             return newRow;
         }
@@ -70,7 +71,7 @@
 
                 // clear out any rows currently displayed on the page
                 $("#mainbody").html("");
-
+                // loop through th results from the api and load to a page row
                 $.each(data, function (index, val) {
                     $("#mainbody").append(loadRow(val));
                 });
@@ -80,9 +81,9 @@
         // if the delete button is clicked, call api to remove selected row
         $("#mainbody").on("click", ".delete", function () {
 
-            console.log($(this).attr("id"));
+            console.log($(this).attr("data"));
             $.ajax({
-                url: 'http://localhost:1337/automobile/' + $(this).attr("id"),
+                url: 'http://localhost:1337/automobile/' + $(this).attr("data"),
                 type: 'DELETE',
                 success: function (result) {
                     $("#status").text(status)
@@ -98,7 +99,7 @@
         // when modify link is clicked, get that row's values from the api and load to the form fields
         $("#mainbody").on("click", ".modify", function () {
 
-            $.get("http://localhost:1337/automobile/" + $(this).attr("id"), function (data) {
+            $.get("http://localhost:1337/automobile/" + $(this).attr("data"), function (data) {
                 $("#recordid").val(data.id);
                 $("#iyear").val(data.year);
                 $("#imake").val(data.make);
