@@ -1,0 +1,20 @@
+.row {
+    display: inline-flex;
+    flex-direction: row;
+    width: 100%;
+}
+.formrow {
+    display: inline-flex;
+    flex-direction: row;
+    width: 100%;
+}
+.formitem{
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+body{
+    margin-top: 10px;
+}
+.hidden{
+    visibility: hidden;
+}

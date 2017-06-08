@@ -1,0 +1,79 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sails Automobile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/stylesheets/styles.css">
+</head>
+
+<body>
+
+    <div class="formrow">
+        <div class="formitem">Year: <input type="text" id="iyear"></div>
+        <div class="formitem">Make: <input type="text" id="imake"></div>
+        <div class="formitem">Model: <input type="text" id="imodel"></div>
+    </div>
+    <div class="formrow">
+        <div class="formitem">Vin: <input type="tel" id="ivin"></div>
+        <div class="formitem">Color: <input type="text" id="icolor"></div>
+        <div class="formitem">Cylinders: <input type="text" id="icylinders"></div>
+        <div class="formitem">Salvage:
+            <input type="radio" id="isalvage" value="true"> Yes
+            <input type="radio" id="isalvage" value="false"> No<br></div>
+    </div>
+    <div class="formrow">
+        <div class="formitem">Transmission: <select id="itransmission">
+                <option value=""></option>
+                <option value="man">Manual</option>
+                <option value="auto">Automatic</option>
+            </select>
+        </div>
+        <div class="formitem">Lic Country: <select id="icountry">
+                <option value=""></option>
+                <option value="USA">USA</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Canada">Canada</option>
+            </select></div>
+        <div class="formitem">Lic State: <input type="text" id="istate"></div>
+        <div class="formitem">Lic Number: <input type="text" id="ilicnumber"></div>
+        <div class="formitem"><button id="submit">submit</button></div>
+        <div class="formitem" id="status"></div>
+        <div class="hidden" id="recordid"></div>
+    </div>
+    <div class="container">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Year</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>VIN</th>
+                    <th>Color</th>
+                    <th>Cylinders</th>
+                    <th>Salvage</th>
+                    <th>Transmission</th>
+                    <th>Lic Country</th>
+                    <th>Lic State</th>
+                    <th>Lic Number</th>
+                </tr>
+            </thead>
+            <tbody id="mainbody">
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/javascript/main.js"></script>
+</body>
+
+</html>
