@@ -1,10 +1,60 @@
 (function () {
 
+    'use strict';
+    
     $(function () {
 
         // display blank on the screen instead of 'undefined'
         function undef(string) {
             return typeof string === "undefined" ? "" : string;
+        }
+        
+        function tdHTML(val) {
+            return ("<td>" + val + "</td>");
+        }
+        // populate the column values of a row
+        function loadRow(val) {
+            let newRow = "<tr>" +
+                "<td><a class='modify' data='" + val.id + "'>Modify<a></td>" +
+                tdHTML(val.year) + 
+                tdHTML(val.make) + 
+                tdHTML(val.model) +
+                tdHTML(undef(val.vin)) +
+                tdHTML(undef(val.color)) + 
+                tdHTML(undef(val.numberCylinders)) +
+                tdHTML(undef(val.salvageTitle)) +
+                tdHTML(undef(val.transmissionType)) +
+                tdHTML(undef(val.licensedState)) +
+                tdHTML(undef(val.licensedCountry)) +
+                tdHTML(undef(val.licenseNumber)) +
+//                "<td>" + val.year + "</td>" +
+//                "<td>" + val.make + "</td>" +
+//                "<td>" + val.model + "</td>" +
+//                "<td>" + undef(val.vin) + "</td>" +
+//                "<td>" + undef(val.color) + "</td>" +
+//                "<td>" + undef(val.numberCylinders) + "</td>" +
+//                "<td>" + undef(val.salvageTitle) + "</td>" +
+//                "<td>" + undef(val.transmissionType) + "</td>" +
+//                "<td>" + undef(val.licensedState) + "</td>" +
+//                "<td>" + undef(val.licensedCountry) + "</td>" +
+//                "<td>" + undef(val.licenseNumber) + "</td>" +
+// 
+                "<td><a class='delete' data='" + val.id + "'>Delete<a></td>"
+            "</tr>";
+            return newRow;
+        }
+
+        // get all of the current autos from the api and load to the page
+        function loadData() {
+            $.get("http://localhost:1337/automobile", function (data) {
+
+                // clear out any rows currently displayed on the page
+                $("#mainbody").empty();
+                // loop through th results from the api and load to a page row
+                $.each(data, function (index, val) {
+                    $("#mainbody").append(loadRow(val));
+                });
+            });
         }
 
         //reset all of the form fields back to blank
@@ -26,28 +76,8 @@
 
         // parse the errors out of the response object and display to the user
         function showErrors(xhr) {
-            var errObj = JSON.parse(jqXHR.responseText);
+            var errObj = JSON.parse(xhr.responseText);
             alert(errObj.details);
-        }
-
-        // populate the column values of a row
-        function loadRow(val) {
-            let newRow = "<tr>" +
-                "<td><a class='modify' data='" + val.id + "'>Modify<a></td>" +
-                "<td>" + val.year + "</td>" +
-                "<td>" + val.make + "</td>" +
-                "<td>" + val.model + "</td>" +
-                "<td>" + undef(val.vin) + "</td>" +
-                "<td>" + undef(val.color) + "</td>" +
-                "<td>" + undef(val.numberCylinders) + "</td>" +
-                "<td>" + undef(val.salvageTitle) + "</td>" +
-                "<td>" + undef(val.transmissionType) + "</td>" +
-                "<td>" + undef(val.licensedState) + "</td>" +
-                "<td>" + undef(val.licensedCountry) + "</td>" +
-                "<td>" + undef(val.licenseNumber) + "</td>" +
-                "<td><a class='delete' data='" + val.id + "'>Delete<a></td>"
-            "</tr>";
-            return newRow;
         }
 
         // get the fields from the form and load them into a JSON object
@@ -65,19 +95,6 @@
                 "licensedCountry": $("#icountry").val(),
                 "licenseNumber": $("#ilicnumber").val()
             };
-        }
-
-        // get all of the current autos from the api and load to the page
-        function loadData() {
-            $.get("http://localhost:1337/automobile", function (data) {
-
-                // clear out any rows currently displayed on the page
-                $("#mainbody").html("");
-                // loop through th results from the api and load to a page row
-                $.each(data, function (index, val) {
-                    $("#mainbody").append(loadRow(val));
-                });
-            });
         }
 
         // if the delete button is clicked, call api to remove selected row
@@ -134,29 +151,28 @@ console.log("adding new row " + getFormFields());
                         resetFormFields();
                         $("#status").text(status)
                     }).fail(function (jqXHR, textStatus, errorThrown) {
-                    $("#status").text(textStatus)
+                    // show the status on the form
+                    $("#status").text(textStatus);
                     // parse the errors out of the response object and display to the user
-                    var errObj = JSON.parse(jqXHR.responseText);
-                    alert(errObj.details);
+                    showErrors(jqXHR);
                 });
             } else {
                 // if there is an ID value, then modify the record
 console.log("updating row " + getFormFields());
-                ajaxResult = $.ajax({
+                var ajaxResult = $.ajax({
                     type: "PUT",
                     url: "http://localhost:1337/automobile/" + $("#recordid").val(),
                     //contentType: "application/json",
                     data: getFormFields(),
                     success: function (data, status) {
                         resetFormFields();
-                        console.log("Data: " + data + "\nStatus: " + status);
+                        // show the status on the form
                         $("#status").text(status);
                     }
                 });
                 ajaxResult.fail(function (xhr) {
                     // parse the errors out of the response object to display to the user
-                    var errObj = JSON.parse(xhr.responseText);
-                    alert(errObj.details);
+                    showErrors(xhr);
                 })
             }
 
